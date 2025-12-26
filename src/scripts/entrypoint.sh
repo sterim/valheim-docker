@@ -151,16 +151,21 @@ create_dir_with_ownership() {
   local dir=$3
 
   mkdir -p "${dir}"
-  sudo chown -R "${user}:${group}" "${dir}"
-  sudo chmod -R ug+rw "${dir}"
+  chown -R "${user}:${group}" "${dir}"
+  chmod -R ug+rw "${dir}"
 }
 
 # Function to set up the filesystem, ensuring correct ownership and permissions
 setup_filesystem() {
   log "Setting up file systems"
 
-  sudo chown -R "$PUID:$PGID" "$HOME" /home/steam/.*
-  sudo chmod -R ug+rwx "$HOME"
+  if [ "$(id -u)" -ne 0 ]; then
+    log "Error: This script must be run as root to set up the filesystem."
+    exit 1
+  fi
+
+  chown -R "$PUID:$PGID" "$HOME"
+  chmod -R ug+rwx "$HOME"
 
   create_dir_with_ownership "$PUID" "$PGID" "$SAVE_LOCATION"
   create_dir_with_ownership "$PUID" "$PGID" "$MODS_LOCATION"
@@ -168,9 +173,9 @@ setup_filesystem() {
   create_dir_with_ownership "$PUID" "$PGID" "$GAME_LOCATION"
   create_dir_with_ownership "$PUID" "$PGID" "$GAME_LOCATION/logs"
   create_dir_with_ownership "$PUID" "$PGID" "$HOME/cron.d"
-  mkdir -p /home/steam/scripts
+  create_dir_with_ownership "$PUID" "$PGID" "/home/steam/scripts"
 
-  sudo usermod -d /home/steam steam
+   usermod -d /home/steam steam
 }
 
 # Function to check if the system has sufficient memory
@@ -182,6 +187,11 @@ check_memory() {
   else
     log "Total memory: ${total_memory} GB"
   fi
+}
+
+drop_privileges_and_start() {
+  # Drop to unprivileged user and start the server
+  exec su - steam -c "/home/steam/scripts/start_valheim.sh"
 }
 
 # Main script execution
@@ -232,4 +242,4 @@ cd /home/steam/valheim || exit 1
 
 # Launch the Valheim server
 log "Launching server..."
-exec /home/steam/scripts/start_valheim.sh
+drop_privileges_and_start

@@ -69,9 +69,10 @@ ARG GITHUB_REPOSITORY="not-set"
 COPY --from=odin --chmod=755 /apps/odin /apps/huginn /usr/local/bin/
 
 # Set version information and configure sudoers
+# Create an overlay file that we can remove once we are done with commands that require
+# elevated permissions.
 RUN printf "${GITHUB_SHA}\n${GITHUB_REF}\n${GITHUB_REPOSITORY}\n" >/home/steam/.version && \
-    echo "root ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
-    echo "steam ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+    echo "root ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 
 # SteamCMD setup
@@ -92,7 +93,7 @@ RUN --mount=type=bind,source=src/scripts/build/setup-steamcmd.sh,target=/tmp/set
 # Final Valheim runtime image
 FROM valheim-steamcmd AS valheim
 
-USER steam
+USER root
 ENV HOME=/home/steam
 ENV USER=steam
 ARG EXPECTED_OCTAL
