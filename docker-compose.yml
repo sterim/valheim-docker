@@ -12,7 +12,7 @@ services:
       - odin
     image: sterim/valheim:latest
     env_file:
-      - ./server.env
+      - ../server.env
     build:
       context: .
       dockerfile: ./Dockerfile
