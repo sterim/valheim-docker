@@ -190,8 +190,14 @@ check_memory() {
 }
 
 drop_privileges_and_start() {
+  # If no args were provided (from CMD), default to start_valheim.sh
+  if [ $# -eq 0 ]; then
+    set -- /home/steam/scripts/start_valheim.sh
+  fi
+
   # Drop to unprivileged user and start the server
-  exec su - steam -c "/home/steam/scripts/start_valheim.sh"
+  cmd=$(printf '%q ' "$@")
+  exec su - steam -c "$cmd"
 }
 
 # Main script execution
