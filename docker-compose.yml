@@ -10,7 +10,7 @@ services:
   valheim:
     depends_on:
       - odin
-    image: mbround18/valheim:latest
+    image: sterim/valheim:latest
     env_file:
       - ./server.env
     build:
