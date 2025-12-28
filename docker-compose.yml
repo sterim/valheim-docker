@@ -24,10 +24,10 @@ services:
       # - "2458:2458/udp"
     restart: unless-stopped
     volumes:
-      - ./tmp/saves:/home/steam/.config/unity3d/IronGate/Valheim
-      - ./tmp/server:/home/steam/valheim
-      - ./tmp/backups:/home/steam/backups
-      - odin-output:/home/steam/.odin
+      - ../mnt/saves:/home/steam/.config/unity3d/IronGate/Valheim
+      - ../mnt/server:/home/steam/valheim
+      - ../mnt/backups:/home/steam/backups
+      - ../mnt/odin-output:/home/steam/.odin
 
 volumes:
   odin-output:
