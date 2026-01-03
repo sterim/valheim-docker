@@ -11,6 +11,16 @@ services:
     depends_on:
       - odin
     image: sterim/valheim:latest
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - chown
+      - fowner
+      - dac_override
+      - setgid
+      - setuid
     env_file:
       - ../server.env
     build:
