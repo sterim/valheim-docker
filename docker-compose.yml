@@ -21,6 +21,7 @@ services:
       - dac_override
       - setgid
       - setuid
+      - sys_nice
     env_file:
       - ../server.env
     build:
