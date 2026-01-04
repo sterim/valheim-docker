@@ -39,8 +39,8 @@ setup_environment() {
   export ODIN_DISCORD_FILE="${ODIN_DISCORD_FILE:-"${GAME_LOCATION}/discord.json"}"
 
   # Set timezone
-  sudo ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime
-  echo "$TZ" | sudo tee -a /etc/timezone
+  ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime
+  echo "$TZ" | tee -a /etc/timezone
 }
 
 # Function to safely shut down the server and terminate cron jobs
@@ -116,7 +116,7 @@ setup_cron_env() {
 
   for var in "${env_vars[@]}"; do
     value="${!var//\"/}"
-    [[ -n "$value" ]] && echo "export ${var}=\"$value\"" | sudo tee -a /env.sh
+    [[ -n "$value" ]] && echo "export ${var}=\"$value\"" | tee -a /env.sh
   done
 
   log "Preset Env Configured"
@@ -234,7 +234,7 @@ if [[ "$AUTO_BACKUP" -eq 1 || "$AUTO_UPDATE" -eq 1 || "$SCHEDULED_RESTART" -eq 1
     done
     crontab /tmp/master-cron
     rm -f /tmp/master-cron
-    sudo cron -f &
+    cron -f &
     export CRON_PID=$!
   else
   log "Error: Cron directory or files are missing."

@@ -68,12 +68,8 @@ ARG GITHUB_REPOSITORY="not-set"
 # Pull Odin binaries from odin-runtime stage
 COPY --from=odin --chmod=755 /apps/odin /apps/huginn /usr/local/bin/
 
-# Set version information and configure sudoers
-# Create an overlay file that we can remove once we are done with commands that require
-# elevated permissions.
-RUN printf "${GITHUB_SHA}\n${GITHUB_REF}\n${GITHUB_REPOSITORY}\n" >/home/steam/.version && \
-    echo "root ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
+# Set version information
+RUN printf "${GITHUB_SHA}\n${GITHUB_REF}\n${GITHUB_REPOSITORY}\n" >/home/steam/.version
 
 # SteamCMD setup
 FROM valheim-root AS valheim-steamcmd
