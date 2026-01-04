@@ -22,6 +22,11 @@ services:
       - setgid
       - setuid
       - sys_nice
+    deploy:
+      resources:
+        reservations:
+          cpus: '1'
+          memory: 250M
     env_file:
       - ../server.env
     build:
