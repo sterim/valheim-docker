@@ -28,6 +28,13 @@ services:
       - ../mnt/server:/home/steam/valheim
       - ../mnt/backups:/home/steam/backups
       - ../mnt/odin-output:/home/steam/.odin
+    networks:
+      - valheim-bifrost
+
+networks:
+  valheim-bifrost:
+    driver: bridge
+    name: valheim-bifrost
 
 volumes:
   odin-output:
