@@ -38,6 +38,7 @@ services:
       - "2457:2457/udp"
       # only needed for crossplay
       # - "2458:2458/udp"
+      - "127.0.0.1:9001:9001/tcp" # Huginn web interface
     restart: unless-stopped
     volumes:
       - ../mnt/saves:/home/steam/.config/unity3d/IronGate/Valheim
